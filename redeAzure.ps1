@@ -4,7 +4,7 @@
 ### Última Revisão: 31 de Janeiro de 2026
 ### Exercício: 02-Gerenciamento de IP
 ### Execute o seguinte comando no Azure CLI:
-### pwsh -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/corsec00/FIAPTDCCloudSec/main/estruturaRedeAzure.ps1' -OutFile 'estruturaRedeAzure.ps1'; ./estruturaRedeAzure.ps1"
+### pwsh -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/corsec00/CloudSec-Aulas/refs/heads/main/redeAzure.ps1' -OutFile 'estruturaRedeAzure.ps1'; ./estruturaRedeAzure.ps1"
 ### ou execute a partir do Visual Studio Code 
 #####################################################
 $StartTime = get-date
