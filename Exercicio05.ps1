@@ -8,14 +8,10 @@ apt update && apt install -y azure-cli
 az --version
 
 # Atualização da chave SSH
+$RG = "rg-exercicio05"
 $myAKV = "akv-exercicio05"
 az keyvault secret set --vault-name $myAKV --name SSH-Key --file vm-linux-leoss001_key.pem
 az keyvault secret show --name SSH-Key --vault-name $myAKV
 
-
-
-
-
-
-
-az keyvault secret show --name SSH-Key --vault-name "akv-exercicio05"
+# Fim do laboratório
+az group delete --name $RG --yes --no-wait
