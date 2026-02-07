@@ -20,7 +20,7 @@ $RegionGroup = Read-Host "Digite a abreviação para a região onde os recursos 
 $Sufix = Read-Host "Digite sufixo dos recursos que serão criados (ex: VNetAluno001 ou o nome que vc achar necessario)"
 $RG = Read-Host "Digite o nome do Resource Group que já foi criado para armazenar os recursos a serem criados (ex: rg-Exercicio05 ou o nome que vc achar necessario)"
 
-$DNS = 'CloudSec.azure.private'
+$DNS = 'leocloudsec.azure.private'
 $VNet4 = 'vnet-' +$Sufix
 # $BST ='bst-'+$RegionGroup +'-' +$Sufix
 $PIPBastion = "pip-" +$RegionGroup +'-'+$Sufix
@@ -50,51 +50,51 @@ $IPBackEnd = $ip +"50.0/24"
 az network private-dns zone create -g $RG --name $DNS
 
 # create ASG
-az network asg create -g $RG -n asg-$RegionGroup-Kubernetes --location $Loc
-az network asg create -g $RG -n asg-$RegionGroup-Windows --location $Loc
-az network asg create -g $RG -n asg-$RegionGroup-Linux --location $Loc
-az network asg create -g $RG -n asg-$RegionGroup-FrontEnd --location $Loc
-az network asg create -g $RG -n asg-$RegionGroup-BackEnd --location $Loc
+az network asg create -g $RG -n asg-$RegionGroup-LSSKubernetes --location $Loc
+az network asg create -g $RG -n asg-$RegionGroup-LSSWindows --location $Loc
+az network asg create -g $RG -n asg-$RegionGroup-LSSLinux --location $Loc
+az network asg create -g $RG -n asg-$RegionGroup-LSSFrontEnd --location $Loc
+az network asg create -g $RG -n asg-$RegionGroup-LSSBackEnd --location $Loc
 
 #Create NSG 
-az network nsg create -g $RG -n nsg-$RegionGroup-Linux --location $Loc
-az network nsg create -g $RG -n nsg-$RegionGroup-Kubernetes --location $Loc
-az network nsg create -g $RG -n nsg-$RegionGroup-Windows --location $Loc
-az network nsg create -g $RG -n nsg-$RegionGroup-FrontEnd --location $Loc
-az network nsg create -g $RG -n nsg-$RegionGroup-BackEnd --location $Loc
+az network nsg create -g $RG -n nsg-$RegionGroup-LSSLinux --location $Loc
+az network nsg create -g $RG -n nsg-$RegionGroup-LSSKubernetes --location $Loc
+az network nsg create -g $RG -n nsg-$RegionGroup-LSSWindows --location $Loc
+az network nsg create -g $RG -n nsg-$RegionGroup-LSSFrontEnd --location $Loc
+az network nsg create -g $RG -n nsg-$RegionGroup-LSSBackEnd --location $Loc
 
 # Create VNet
 az network vnet create --resource-group $RG --name $VNet4 --location $Loc --address-prefix $AddrSpace
 
 # Create NSG Kubernetes
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n Kubernetes-API-Server --destination-asgs asg-$RegionGroup-Kubernetes --priority 2100 --destination-port-ranges 6443  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n Kubelet-API --destination-asgs asg-$RegionGroup-Kubernetes --priority 2101 --destination-port-ranges 10250  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n Kube-Scheduler --destination-asgs asg-$RegionGroup-Kubernetes --priority 2102 --destination-port-ranges 10259  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n Kube-Controler-Manager --destination-asgs asg-$RegionGroup-Kubernetes --priority 2103 --destination-port-ranges 10257  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n SSHInbound --destination-asgs asg-$RegionGroup-Kubernetes --priority 2104 --destination-port-ranges 22  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n etcd-Server-Client-API --destination-asgs asg-$RegionGroup-Kubernetes --priority 2105 --destination-port-ranges 2379-2380  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Kubernetes -n NodePort-Services --destination-asgs asg-$RegionGroup-Kubernetes --priority 2106 --destination-port-ranges 30000-32767  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n Kubernetes-API-Server --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2100 --destination-port-ranges 6443  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n Kubelet-API --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2101 --destination-port-ranges 10250  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n Kube-Scheduler --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2102 --destination-port-ranges 10259  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n Kube-Controler-Manager --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2103 --destination-port-ranges 10257  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n SSHInbound --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2104 --destination-port-ranges 22  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n etcd-Server-Client-API --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2105 --destination-port-ranges 2379-2380  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSKubernetes -n NodePort-Services --destination-asgs asg-$RegionGroup-LSSKubernetes --priority 2106 --destination-port-ranges 30000-32767  --access Allow --protocol Tcp --source-address-prefixes '*'
 # Create NSG Linux
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Linux -n SSHInbound --destination-asgs asg-$RegionGroup-Linux --priority 2200 --destination-port-ranges 22  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSLinux -n SSHInbound --destination-asgs asg-$RegionGroup-LSSLinux --priority 2200 --destination-port-ranges 22  --access Allow --protocol Tcp --source-address-prefixes '*'
 # Create NSG Windows
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Windows -n RDPInbound --destination-asgs asg-$RegionGroup-Windows --priority 2300 --destination-port-ranges 3389  --access Allow --protocol Tcp --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-Windows -n SMBInbound --destination-asgs asg-$RegionGroup-Windows --priority 2301 --destination-port-ranges 445 139 138 137  --access Allow --protocol '*' --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSWindows -n RDPInbound --destination-asgs asg-$RegionGroup-LSSWindows --priority 2300 --destination-port-ranges 3389  --access Allow --protocol Tcp --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSWindows -n SMBInbound --destination-asgs asg-$RegionGroup-LSSWindows --priority 2301 --destination-port-ranges 445 139 138 137  --access Allow --protocol '*' --source-address-prefixes '*'
 
 # Create NSG BackEnd
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-BackEnd -n Web --destination-asgs asg-$RegionGroup-Windows --priority 2400 --destination-port-ranges 80 443   --access Allow --protocol '*' --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-BackEnd -n Mngmnt --destination-asgs asg-$RegionGroup-Windows --priority 2401 --destination-port-ranges 22 3389  --access Allow --protocol '*' --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSBackEnd -n Web --destination-asgs asg-$RegionGroup-LSSWindows --priority 2400 --destination-port-ranges 80 443   --access Allow --protocol '*' --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSBackEnd -n Mngmnt --destination-asgs asg-$RegionGroup-LSSWindows --priority 2401 --destination-port-ranges 22 3389  --access Allow --protocol '*' --source-address-prefixes '*'
 
 # Create NSG FrontEnd
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-FrontEnd -n Web --destination-asgs asg-$RegionGroup-Windows --priority 2500 --destination-port-ranges 80 443   --access Allow --protocol '*' --source-address-prefixes '*'
-az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-FrontEnd -n Mngmnt --destination-asgs asg-$RegionGroup-Windows --priority 2501 --destination-port-ranges 22 3389  --access Allow --protocol '*' --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSFrontEnd -n Web --destination-asgs asg-$RegionGroup-LSSWindows --priority 2500 --destination-port-ranges 80 443   --access Allow --protocol '*' --source-address-prefixes '*'
+az network nsg rule create -g $RG --nsg-name nsg-$RegionGroup-LSSFrontEnd -n Mngmnt --destination-asgs asg-$RegionGroup-LSSWindows --priority 2501 --destination-port-ranges 22 3389  --access Allow --protocol '*' --source-address-prefixes '*'
 
 # Create subnets
 az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name AzureBastionSubnet --address-prefix $IPBst
-az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name VM-Windows --address-prefix $IPWindows --network-security-group nsg-$RegionGroup-Windows --private-endpoint-network-policies Enabled
-az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name VM-Linux --address-prefix $IPLinux --network-security-group nsg-$RegionGroup-Linux --private-endpoint-network-policies Enabled
-az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name VM-Kubernetes --address-prefix $IPK8  --network-security-group nsg-$RegionGroup-Kubernetes --private-endpoint-network-policies Enabled
-az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name FrontEnd --address-prefix $IPFrontEnd  --network-security-group nsg-$RegionGroup-FrontEnd --private-endpoint-network-policies Enabled
-az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name BackEnd --address-prefix $IPBackEnd   --network-security-group nsg-$RegionGroup-BackEnd --private-endpoint-network-policies Enabled
+az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name VM-LSSWindows --address-prefix $IPWindows --network-security-group nsg-$RegionGroup-LSSWindows --private-endpoint-network-policies Enabled
+az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name VM-LSSLinux --address-prefix $IPLinux --network-security-group nsg-$RegionGroup-LSSLinux --private-endpoint-network-policies Enabled
+az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name VM-LSSKubernetes --address-prefix $IPK8  --network-security-group nsg-$RegionGroup-LSSKubernetes --private-endpoint-network-policies Enabled
+az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name LSSFrontEnd --address-prefix $IPFrontEnd  --network-security-group nsg-$RegionGroup-LSSFrontEnd --private-endpoint-network-policies Enabled
+az network vnet subnet create --resource-group $RG --vnet-name $VNet4 --name LSSBackEnd --address-prefix $IPBackEnd   --network-security-group nsg-$RegionGroup-LSSBackEnd --private-endpoint-network-policies Enabled
 
 # Criando um link entre a VNet e o Private DNS Zone
 az network private-dns link vnet create --resource-group $RG --zone-name $DNS --name $DNS --virtual-network $VNet4 --registration-enabled true
